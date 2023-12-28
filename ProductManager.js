@@ -1,9 +1,10 @@
+const fs = require('fs');
 class ProductManager{
     constructor(){
         this.products = [];
         this.id = 1;
     }
-        
+
     AddProduct ( {title, description, price, thumbnail, code, stock} ){
         if (!title || !description || !price || !thumbnail || !code || !stock) {
             console.log(`Todos los campos son obligatorios, el producto ${title} no se agrego.`);
@@ -19,7 +20,7 @@ class ProductManager{
     getProducts(){
         return this.products;
     }
-
+    
     getProductsById(id){
         let product = this.products.find(product => product.id === id);
     
@@ -29,9 +30,36 @@ class ProductManager{
             return product;
         }
     }
-
+    
+    writeToFile(test) {
+        fs.promises.writeFile( test, JSON.stringify(this.products, null, 2), { encoding: 'utf-8' } )
+        .then( resp => {
+            console.log('Archivo txt creado')
+        })
+        .catch( err => {
+            console.log('Error al crear archivo', err)
+        })
+    }
+    
+    updateProduct(id, { title, description, price, thumbnail, code, stock }) {
+        const productIndex = this.products.findIndex(product => product.id === id);
+        if (productIndex !== -1) {
+            this.products[productIndex] = {
+                id,
+                title,
+                description,
+                price,
+                thumbnail,
+                code,
+                stock
+            };
+            console.log(`Producto con ID ${id} actualizado correctamente.`);
+        } else {
+            console.log(`No se encontró un producto con ID ${id}. La actualización no fue posible.`);
+        }
+    }
 }
-
+const path = "./test.txt";
 const product = new ProductManager()
 
 console.log( product.getProducts());
@@ -82,3 +110,29 @@ console.log(product.getProductsById(2));
 
 // busqueda de id inexistente
 console.log(product.getProductsById(6));
+
+
+// Llamado a funcion para actualizar datos
+product.updateProduct(2, {
+    title: "Pedigree perro",
+    description: "alimento balanceado",
+    price: 26000,
+    thumbnail: "url-img",
+    code: 2001,
+    stock: 19
+});
+
+
+product.writeToFile(path);
+
+
+const read = async ()=>{
+    try{
+        let resp = await fs.promises.readFile(path, 'utf-8')
+        console.log('Lectura de archivo txt: ', resp)
+    }catch(err){
+        console.log('Error: ', err)
+    }
+}
+
+read()
