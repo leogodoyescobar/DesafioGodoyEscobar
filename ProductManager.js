@@ -59,7 +59,7 @@ class ProductManager{
         }
     }
 }
-const path = "./test.txt";
+const path = "./productos.json";
 const product = new ProductManager()
 
 console.log( product.getProducts());
