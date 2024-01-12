@@ -14,16 +14,12 @@ app.get("/Productos", async (req, res)=> {
     res.send(resp);
 })
 
-app.get("/producto/:id", async (req, res) => {
-    let id = parseInt(req.params.id)
+app.get("/producto/:id",  (req, res) => {
+    let id = (req.params.id)
     let productoFnd = productos.find( (producto) => {
         return producto.id === id
     })
-    if (productoFnd) {
-        res.json(productoFnd);
-    } else {
-        res.status(404).json({ error: 'Producto no encontrado' });
-    }
+    res.send(productoFnd)
 
     // productos.readFileById(id)
     // .then( (product) => {
