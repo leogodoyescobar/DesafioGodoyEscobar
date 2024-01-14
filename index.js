@@ -10,8 +10,7 @@ app.get('/', ( req, res)=> {
 
 app.get("/productos", async (req, res)=> {
     let resp = await productos.getProducts();
-    const parsedResp = JSON.parse(resp);
-    res.send(parsedResp);
+    res.send(resp);
 })
 
 app.get("/producto/:id",  (req, res) => {

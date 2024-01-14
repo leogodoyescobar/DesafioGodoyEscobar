@@ -30,8 +30,9 @@ class ProductManager{
 
     async getProducts() {
         try {
-            let res = await fs.promises.readFile(this.path, 'utf-8');            
-            return res
+            let res = await fs.promises.readFile(this.path, 'utf-8');   
+            let parsedRes = JSON.parse(res)         
+            return parsedRes
         } catch (err) {
             console.log('Error:', err);
         }
