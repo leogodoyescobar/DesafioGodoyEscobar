@@ -9,8 +9,12 @@ app.get('/', ( req, res)=> {
 })
 
 app.get("/productos", async (req, res)=> {
+    const limit = parseInt(req.query.limit) || 0;
     let resp = await productos.getProducts();
-    res.send(resp);
+    if (limit > 0) {
+        resp = resp.slice(0, limit);
+    }
+    res.json(resp);
 })
 
 app.get("/producto/:id",  (req, res) => {
@@ -18,7 +22,7 @@ app.get("/producto/:id",  (req, res) => {
     productos.getProductById(id)
     .then ( (product) => {
         if (product) {
-            res.send( product)
+            res.json( product)
         } else {
             res.send(`No hay producto`)
         }
