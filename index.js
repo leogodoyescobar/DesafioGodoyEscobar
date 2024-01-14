@@ -8,24 +8,25 @@ app.get('/', ( req, res)=> {
     res.send('Bienvenido a tales petshop');
 })
 
-app.get("/Productos", async (req, res)=> {
-    let resp = await productos.readFile();
-    // const parsedResp = JSON.parse(resp);
-    res.send(resp);
+app.get("/productos", async (req, res)=> {
+    let resp = await productos.getProducts();
+    const parsedResp = JSON.parse(resp);
+    res.send(parsedResp);
 })
 
 app.get("/producto/:id",  (req, res) => {
-    let id = (req.params.id)
-    let productoFnd = productos.find( (producto) => {
-        return producto.id === id
+    let id = parseInt(req.params.id)
+    productos.getProductById(id)
+    .then ( (product) => {
+        if (product) {
+            res.send( product)
+        } else {
+            res.send(`No hay producto`)
+        }
     })
-    res.send(productoFnd)
-
-    // productos.readFileById(id)
-    // .then( (product) => {
-    //     if (product) { res.send(product)
-    //     } else {'Producto no encontrado'}
-    // })
+    .catch( (err) => {
+        console.log(`No hay producto`)
+    } )
 })
 
 app.listen(8080, ()=> {

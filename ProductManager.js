@@ -17,20 +17,6 @@ class ProductManager{
             console.log(`El producto ${title} ya existe.`);
         }
     }
-
-    getProducts(){
-        return this.products;
-    }
-    
-    getProductsById(id){
-        let product = this.products.find(product => product.id === id);
-    
-        if (!product) {
-            console.log("Producto no encontrado.");
-        } else {
-            return product;
-        }
-    }
     
     writeToFile(test) {
         fs.promises.writeFile( test, JSON.stringify(this.products, null, 2), { encoding: 'utf-8' } )
@@ -42,20 +28,20 @@ class ProductManager{
         })
     }
 
-    async readFile() {
+    async getProducts() {
         try {
-            let res = await fs.promises.readFile(this.path, 'utf-8');
-            console.log('Lectura de archivo productos.json a continuacion:', res);
+            let res = await fs.promises.readFile(this.path, 'utf-8');            
             return res
         } catch (err) {
             console.log('Error:', err);
         }
     }
 
-    async readFileById(id) {
+    async getProductById(id) {
         try {
             let res = await fs.promises.readFile(this.path, 'utf-8');
-            let product = this.products.find(pr => pr.id === id);
+            let products = JSON.parse(res)
+            let product = products.find(pr => pr.id === id);
             return product
         } catch (err) {
             console.log('Error:', err);
@@ -81,7 +67,7 @@ class ProductManager{
         }
     }
 }
-const path = "./productos.json";
+// const path = "./productos.json";
 // const product = new ProductManager()
 
 // console.log( product.getProducts());
@@ -146,16 +132,6 @@ const path = "./productos.json";
 
 
 // product.writeToFile(path);
-
-
-// const read = async ()=>{
-//     try{
-//         let resp = await fs.promises.readFile(path, 'utf-8')
-//         console.log('Lectura de archivo txt: ', resp)
-//     }catch(err){
-//         console.log('Error: ', err)
-//     }
-// }
 
 // product.readFile(path);
 
